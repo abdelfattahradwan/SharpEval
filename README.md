@@ -13,7 +13,7 @@ SharpEval is a library that allows you to parse & evaluate math expressions at r
 
 ## Usage
 
-- Evaluate & parse a simple expression:
+- Parse & evaluate a simple expression:
 
 ```cs
 using SharpEval;
@@ -28,7 +28,7 @@ internal static class Program
 ```
 
 
-- Evaluate & parse a more complex expression:
+- Parse & evaluate a more complex expression:
 
 ```cs
 using SharpEval;
