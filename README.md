@@ -87,7 +87,3 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ## Donation
 
 If you like SharpEval consider [buying me a coffee](https://ko-fi.com/winterboltgames).
-
-## Liscense
-
-[MIT](https://choosealicense.com/licenses/mit/)
