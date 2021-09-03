@@ -37,7 +37,6 @@ namespace SharpEval
 
 		public static Dictionary<string, Func<double[], double>> Functions = new Dictionary<string, Func<double[], double>>
 		{
-			{ "sum", args => args.Sum() },
 			{ "sin", args => Math.Sin(args[0]) },
 			{ "cos", args => Math.Cos(args[0]) },
 			{ "tan", args => Math.Tan(args[0]) },
@@ -117,7 +116,7 @@ namespace SharpEval
 
 							if (i > 0 && char.IsLetter(symbols[i - 1]))
 							{
-								output.Enqueue(FunctionLeftParenthesis.Instance);
+								output.Enqueue(FunctionLeftParenthesisToken.Instance);
 							}
 							else output.Enqueue(LeftParenthesisToken.Instance);
 
@@ -240,7 +239,7 @@ namespace SharpEval
 			{
 				var token = tokens.Dequeue();
 
-				if (token is FunctionLeftParenthesis)
+				if (token is FunctionLeftParenthesisToken)
 				{
 					elementTokens.Enqueue(ExtractParameterArray(tokens));
 				}
@@ -276,7 +275,7 @@ namespace SharpEval
 			{
 				var token = tokens.Dequeue();
 
-				if (token is FunctionLeftParenthesis)
+				if (token is FunctionLeftParenthesisToken)
 				{
 					output.Enqueue(ExtractParameterArray(tokens));
 				}
@@ -298,7 +297,7 @@ namespace SharpEval
 				{
 					expressionTokens.Enqueue(ExtractExpression(tokens));
 				}
-				else if (token is FunctionLeftParenthesis)
+				else if (token is FunctionLeftParenthesisToken)
 				{
 					expressionTokens.Enqueue(ExtractParameterArray(tokens));
 				}
