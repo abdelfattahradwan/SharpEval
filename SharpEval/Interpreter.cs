@@ -35,7 +35,7 @@ namespace SharpEval
 			{ "e", () => Math.E },
 		};
 
-		public static Dictionary<string, Func<double[], double>> Functions = new Dictionary<string, Func<double[], double>>
+		public static readonly Dictionary<string, Func<double[], double>> Functions = new Dictionary<string, Func<double[], double>>
 		{
 			{ "sin", args => Math.Sin(args[0]) },
 			{ "cos", args => Math.Cos(args[0]) },
