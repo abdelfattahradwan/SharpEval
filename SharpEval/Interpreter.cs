@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 
 using SharpEval.Tokens;
+using SharpEval.Variables;
 
 namespace SharpEval
 {
 	public static class Interpreter
 	{
-		private static bool IsOperator(char @char)
+		private static bool IsOperator(char c)
 		{
-			switch (@char)
+			switch (c)
 			{
 				case '+':
 				case '-':
@@ -29,11 +30,11 @@ namespace SharpEval
 			}
 		}
 
-		public static readonly Dictionary<string, Func<double>> Variables = new Dictionary<string, Func<double>>
+		public static readonly Dictionary<string, IVariable> Variables = new Dictionary<string, IVariable>
 		{
-			{ "pi", () => Math.PI },
-			{ "tau", () => Math.PI * 2.0d },
-			{ "e", () => Math.E },
+			{ "pi", new ReadOnlyVariable(Math.PI) },
+			{ "tau", new ReadOnlyVariable(Math.PI * 2.0d) },
+			{ "e", new ReadOnlyVariable(Math.E) },
 		};
 
 		public static readonly Dictionary<string, Func<double[], double>> Functions = new Dictionary<string, Func<double[], double>>
@@ -430,7 +431,7 @@ namespace SharpEval
 
 						_ = tokens.Dequeue();
 					}
-					else operandStack.Push(Variables[wordToken.ToString()]());
+					else operandStack.Push(Variables[wordToken.ToString()].Value);
 				}
 				else if (token is PlusToken)
 				{
