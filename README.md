@@ -27,7 +27,6 @@ internal static class Program
 }
 ```
 
-
 - Parse & evaluate a more complex expression:
 
 ```cs
@@ -42,7 +41,7 @@ internal static class Program
 }
 ```
 
-- Define custom variables:
+- Define custom read-only variables:
 
 ```cs
 using SharpEval;
@@ -51,10 +50,29 @@ internal static class Program
 {
   internal static void Main()
   {
-    Interpreter.Variables["x"] = () => 10.0d;
-    Interpreter.Variables["y"] = () => 15.0d;
+    Interpreter.Variables["x"] = new ReadOnlyVariable(10.0d);
+    Interpreter.Variables["y"] = new ReadOnlyVariable(15.0d);
     
     Console.WriteLine(Interpreter.ParseAndEvaluate(" x + y ")); // 25
+  }
+}
+```
+
+- Define custom computed variables:
+
+```cs
+using SharpEval;
+using System;
+
+internal static class Program
+{
+  internal static void Main()
+  {
+    var random = new Random();
+  
+    Interpreter.Variables["rnd"] = new ComputedVariable(() => random.NextDouble());
+    
+    Interpreter.ParseAndEvaluate("rnd * 100.0d");
   }
 }
 ```
