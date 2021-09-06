@@ -16,6 +16,7 @@ namespace SharpEval
 				case '-':
 				case '*':
 				case '/':
+				case '%':
 				case '^':
 				case '(':
 				case '[':
@@ -103,6 +104,12 @@ namespace SharpEval
 						case '/':
 
 							output.Enqueue(DivideToken.Instance);
+
+							break;
+
+						case '%':
+
+							output.Enqueue(ModuloToken.Instance);
 
 							break;
 
@@ -335,7 +342,7 @@ namespace SharpEval
 			{
 				return 0;
 			}
-			else if (token is TimesToken || token is DivideToken)
+			else if (token is TimesToken || token is DivideToken || token is ModuloToken)
 			{
 				return 1;
 			}
@@ -446,6 +453,13 @@ namespace SharpEval
 					operand1 = operandStack.Pop();
 
 					operandStack.Push(operand1 / operand2);
+				}
+				else if (token is ModuloToken)
+				{
+					operand2 = operandStack.Pop();
+					operand1 = operandStack.Pop();
+
+					operandStack.Push(operand1 % operand2);
 				}
 				else if (token is ExponentToken)
 				{
