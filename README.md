@@ -6,7 +6,7 @@ SharpEval is a library that allows you to parse & evaluate math expressions at r
 
 - Parses and evaluates expressions extremely fast.
 - Supports custom variables and functions.
-- Works with Unity 2018.1 and upwards.
+- Works with Unity 5 (and possibly older) and newer.
 - Supports Unity IL2CPP.
 - No reflection.
 - No external dependencies.
@@ -93,10 +93,6 @@ internal static class Program
   }
 }
 ```
-
-## Notes
-
-The library targets .NET Standard 2.0 (https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
 
 ## Contributing
 
