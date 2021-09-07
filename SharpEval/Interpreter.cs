@@ -47,7 +47,7 @@ namespace SharpEval
 		public static Queue<IToken> Tokenize(string expression)
 		{
 			var output = new Queue<IToken>();
-
+			
 			var symbols = expression.Where(@char => !char.IsWhiteSpace(@char)).ToArray();
 
 			for (var i = 0; i < symbols.Length; i++)
@@ -157,9 +157,10 @@ namespace SharpEval
 					continue;
 				}
 
-				var numberSymbols = new Queue<IToken>();
-
-				numberSymbols.Enqueue(current);
+				var numberTokens = new List<IToken>
+				{
+					current,
+				};
 
 				while (tokens.Any())
 				{
@@ -167,19 +168,19 @@ namespace SharpEval
 
 					if (next is DigitToken)
 					{
-						numberSymbols.Enqueue(next);
+						numberTokens.Add(next);
 					}
 					else if (next is PeriodToken)
 					{
-						if (!numberSymbols.OfType<PeriodToken>().Any()) numberSymbols.Enqueue(next);
+						if (!numberTokens.OfType<PeriodToken>().Any()) numberTokens.Add(next);
 					}
 					else if (next is LetterToken letterToken)
 					{
-						if (!numberSymbols.OfType<LetterToken>().Any())
+						if (!numberTokens.OfType<LetterToken>().Any())
 						{
 							if (letterToken.Letter == 'e')
 							{
-								numberSymbols.Enqueue(letterToken);
+								numberTokens.Add(letterToken);
 							}
 							else break;
 						}
@@ -189,7 +190,7 @@ namespace SharpEval
 					_ = tokens.Dequeue();
 				}
 
-				if (numberSymbols.Count > 1 || !(numberSymbols.Peek() is PeriodToken)) output.Enqueue(new NumberToken(numberSymbols));
+				if (numberTokens.Count > 1 || !(numberTokens[0] is PeriodToken)) output.Enqueue(new NumberToken(numberTokens.ToArray()));
 			}
 
 			return output;
@@ -210,9 +211,10 @@ namespace SharpEval
 					continue;
 				}
 
-				var wordSymbols = new Queue<IToken>();
-
-				wordSymbols.Enqueue(current);
+				var wordTokens = new List<IToken>
+				{
+					current,
+				};
 
 				while (tokens.Any())
 				{
@@ -220,18 +222,18 @@ namespace SharpEval
 
 					if (next is LetterToken || next is DigitToken)
 					{
-						wordSymbols.Enqueue(next);
+						wordTokens.Add(next);
 					}
 					else if (next is NumberToken numberToken)
 					{
-						foreach (var symbol in numberToken.Symbols) wordSymbols.Enqueue(symbol);
+						wordTokens.AddRange(numberToken.Tokens);
 					}
 					else break;
 
 					_ = tokens.Dequeue();
 				}
 
-				output.Enqueue(new WordToken(wordSymbols));
+				output.Enqueue(new WordToken(wordTokens.ToArray()));
 			}
 
 			return output;
@@ -239,7 +241,7 @@ namespace SharpEval
 
 		private static ParameterArrayToken ExtractParameterArray(Queue<IToken> tokens)
 		{
-			var arrayElements = new Queue<ExpressionToken>();
+			var arrayElements = new List<ExpressionToken>();
 
 			var elementTokens = new Queue<IToken>();
 
@@ -259,20 +261,20 @@ namespace SharpEval
 				{
 					if (!elementTokens.Any()) continue;
 
-					arrayElements.Enqueue(new ExpressionToken(InfixToPostfix(elementTokens)));
+					arrayElements.Add(new ExpressionToken(InfixToPostfix(elementTokens)));
 
 					elementTokens.Clear();
 				}
 				else if (token is RightParenthesisToken)
 				{
-					if (elementTokens.Any()) arrayElements.Enqueue(new ExpressionToken(InfixToPostfix(elementTokens)));
+					if (elementTokens.Any()) arrayElements.Add(new ExpressionToken(InfixToPostfix(elementTokens)));
 
 					break;
 				}
 				else elementTokens.Enqueue(token);
 			}
 
-			return new ParameterArrayToken(arrayElements);
+			return new ParameterArrayToken(arrayElements.ToArray());
 		}
 
 		public static Queue<IToken> ParameterArrayPass(Queue<IToken> tokens)

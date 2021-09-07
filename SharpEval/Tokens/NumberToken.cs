@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-
-namespace SharpEval.Tokens
+﻿namespace SharpEval.Tokens
 {
 	public sealed class NumberToken : IToken
 	{
-		public Queue<IToken> Symbols { get; }
+		public IToken[] Tokens { get; }
 
 		public double Value => double.Parse(ToString());
 
-		public NumberToken(Queue<IToken> symbols) => Symbols = symbols;
+		public NumberToken(IToken[] tokens) => Tokens = tokens;
 
-		public override string ToString() => string.Concat(Symbols);
+		public override string ToString() => string.Concat(Tokens);
 	}
 }
