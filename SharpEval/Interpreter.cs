@@ -20,7 +20,6 @@ namespace SharpEval
 				case '%':
 				case '^':
 				case '(':
-				case '[':
 
 					return true;
 
@@ -48,7 +47,7 @@ namespace SharpEval
 		{
 			var output = new Queue<IToken>();
 			
-			var symbols = expression.Where(@char => !char.IsWhiteSpace(@char)).ToArray();
+			var symbols = expression.Where(c => !char.IsWhiteSpace(c)).ToArray();
 
 			for (var i = 0; i < symbols.Length; i++)
 			{
@@ -361,7 +360,7 @@ namespace SharpEval
 			{
 				return 4;
 			}
-			else throw new ArgumentException($"Invalid token type '{token.GetType().Name}'.", nameof(token));
+			else throw new ArgumentException($"Invalid token type.", nameof(token));
 		}
 
 		public static Queue<IToken> InfixToPostfix(Queue<IToken> tokens)
