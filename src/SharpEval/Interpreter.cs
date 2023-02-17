@@ -18,7 +18,7 @@ public static class Interpreter
 		{
 			NumericLiteralExpression numericLiteralExpression => numericLiteralExpression.Value,
 
-			IdentifierExpression identifierExpression => EvaluateIdentifierExpression(identifierExpression, context),
+			IdentifierExpression identifierExpression => context.GetValue(identifierExpression.Name),
 
 			CallExpression callExpression => EvaluateCallExpression(callExpression, context),
 
@@ -28,11 +28,6 @@ public static class Interpreter
 
 			_ => throw new Exception($"Unexpected expression: {expression}"),
 		};
-	}
-
-	private static double EvaluateIdentifierExpression(IdentifierExpression identifierExpression, IContext context)
-	{
-		return context.GetValue(identifierExpression.Name);
 	}
 
 	private static double EvaluateCallExpression(CallExpression callExpression, IContext context)
