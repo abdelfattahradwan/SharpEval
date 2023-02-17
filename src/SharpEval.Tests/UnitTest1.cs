@@ -18,27 +18,6 @@ public class UnitTest1
 	[Fact]
 	public void Test1()
 	{
-		// const string input = "(2 + 2) * 1";
-		//
-		// Tokenizer tokenizer = new(input);
-		//
-		// Token[] tokens = tokenizer.ToArray();
-		//
-		// foreach (Token token in tokens)
-		// {
-		// 	_testOutputHelper.WriteLine(token.ToDebugString());
-		// }
-		//
-		// Parser parser = new(tokens);
-		//
-		// Expression expression = parser.ParseExpression();
-		//
-		// _testOutputHelper.WriteLine($"{expression.ToDebugString()} ({expression})");
-		//
-		// double result = Interpreter.Evaluate(expression, new TestContext());
-		//
-		// _testOutputHelper.WriteLine(result.ToString(CultureInfo.InvariantCulture));
-
 		Interpreter.DictionaryContext context = new()
 		{
 			Values =
@@ -53,13 +32,13 @@ public class UnitTest1
 			},
 		};
 
-		Token[] tokens = new Tokenizer(" sum ( x , y ) ").ToArray();
+		Token[] tokens = new Tokenizer(" sum ( x , sum ( y , sum ( 1 , 2 ) ) ) ").ToArray();
 
 		Expression expression = new Parser(tokens).ParseExpression();
 
 		double result = Interpreter.Evaluate(expression, context);
 
-		_testOutputHelper.WriteLine(result.ToString(CultureInfo.InvariantCulture)); // 30
+		_testOutputHelper.WriteLine(result.ToString(CultureInfo.InvariantCulture)); // 33
 	}
 }
 
