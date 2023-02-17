@@ -1,5 +1,6 @@
 ﻿using SharpEval.Expressions;
 using System;
+using System.Collections.Generic;
 
 namespace SharpEval;
 
@@ -10,6 +11,34 @@ public static class Interpreter
 		double GetValue(string name);
 
 		Func<double[], double> GetFunction(string name);
+	}
+
+	public sealed class DictionaryContext : IContext
+	{
+		public Dictionary<string, double> Values { get; }
+
+		public Dictionary<string, Func<double[], double>> Functions { get; }
+
+		public DictionaryContext(Dictionary<string, double> values, Dictionary<string, Func<double[], double>> functions)
+		{
+			Values = values;
+
+			Functions = functions;
+		}
+
+		public DictionaryContext(Dictionary<string, double> values) : this(values, new Dictionary<string, Func<double[], double>>()) { }
+
+		public DictionaryContext(Dictionary<string, Func<double[], double>> functions) : this(new Dictionary<string, double>(), functions) { }
+
+		public double GetValue(string name)
+		{
+			return Values[name];
+		}
+
+		public Func<double[], double> GetFunction(string name)
+		{
+			return Functions[name];
+		}
 	}
 
 	public static double Evaluate(Expression expression, IContext context)
