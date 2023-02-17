@@ -29,6 +29,8 @@ public static class Interpreter
 		public DictionaryContext(Dictionary<string, double> values) : this(values, new Dictionary<string, Func<double[], double>>()) { }
 
 		public DictionaryContext(Dictionary<string, Func<double[], double>> functions) : this(new Dictionary<string, double>(), functions) { }
+		
+		public DictionaryContext() : this(new Dictionary<string, double>(), new Dictionary<string, Func<double[], double>>()) { }
 
 		public double GetValue(string name)
 		{
