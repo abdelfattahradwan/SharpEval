@@ -76,6 +76,13 @@ public sealed class Tokenizer : IEnumerable<Token>
 
 					return new LeftParenthesisToken();
 				}
+				
+				case ',':
+				{
+					Read();
+
+					return new CommaToken();
+				}
 
 				case ')':
 				{
