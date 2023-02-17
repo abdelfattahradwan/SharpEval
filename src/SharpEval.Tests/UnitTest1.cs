@@ -14,41 +14,16 @@ public class UnitTest1
 		_testOutputHelper = testOutputHelper;
 	}
 
-	private const string MathExpression =
-		"( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) ) ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) ) ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) ) ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) ) ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) ) ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) ) ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) ) ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) + ( ( 2 + 2 ) / 2 - 8 * 4 + 16 ) ) )";
-
 	[Fact]
 	public void Test1()
 	{
-		IToken[] tokens = Tokenizer.Tokenize(MathExpression);
+		const string input = "11.6623156723451423641623461243651423651623416423651423661 + 2 * 3";
 		
-		foreach (IToken token in tokens)
+		Tokenizer tokenizer = new(input);
+
+		foreach (Token token in tokenizer)
 		{
-			_testOutputHelper.WriteLine(token.ToString());
+			_testOutputHelper.WriteLine(token.ToDebugString());
 		}
-
-		long min = long.MaxValue;
-		long max = long.MinValue;
-
-		Stopwatch stopwatch = new();
-
-		Interpreter interpreter = new();
-
-		double result = 0.0d;
-
-		for (int i = 0; i < 4_000; i++)
-		{
-			stopwatch.Restart();
-
-			result = interpreter.EvaluateExpression(tokens);
-
-			stopwatch.Stop();
-
-			if (stopwatch.ElapsedMilliseconds < min) min = stopwatch.ElapsedMilliseconds;
-
-			if (stopwatch.ElapsedMilliseconds > max) max = stopwatch.ElapsedMilliseconds;
-		}
-
-		_testOutputHelper.WriteLine($"Result: {result}, Took: {min}ms - {max}ms");
 	}
 }
