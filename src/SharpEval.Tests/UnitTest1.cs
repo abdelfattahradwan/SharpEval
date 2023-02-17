@@ -19,7 +19,7 @@ public class UnitTest1
 	[Fact]
 	public void Test1()
 	{
-		const string input = "1+4-4*4+4/4/4-4/4+4*4+4+4-4+4/4-4-4+4/4/4+4*4+4+4-4/4*4*4+4-4+4/4+4*4+4+4*4-4-4/4+4/4+4+4/4*4-4+4/4+4*4-4/4*4+4+4-4+4/4*4*4-4/4+44-4+4/4/4*4-4+4*4";
+		const string input = "(2 + 2) * 1";
 		
 		Tokenizer tokenizer = new(input);
 		
@@ -34,9 +34,11 @@ public class UnitTest1
 
 		Expression expression = parser.ParseExpression();
 		
-		double result = Interpreter.Evaluate(expression, new TestContext());
+		_testOutputHelper.WriteLine($"{expression.ToDebugString()} ({expression})");
 		
-		_testOutputHelper.WriteLine(result.ToString(CultureInfo.InvariantCulture));
+		// double result = Interpreter.Evaluate(expression, new TestContext());
+		// 
+		// _testOutputHelper.WriteLine(result.ToString(CultureInfo.InvariantCulture));
 	}
 }
 
