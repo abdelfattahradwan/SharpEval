@@ -8,7 +8,4 @@ public enum Operator
 	Times,
 	Divide,
 	Modulo,
-
-	UnaryPlus,
-	UnaryMinus,
 }
