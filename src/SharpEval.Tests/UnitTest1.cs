@@ -19,7 +19,7 @@ public class UnitTest1
 	[Fact]
 	public void Test1()
 	{
-		const string input = "(((53)-(2*(5-2)))+(3+(2/1)))";
+		const string input = "1+4-4*4+4/4/4-4/4+4*4+4+4-4+4/4-4-4+4/4/4+4*4+4+4-4/4*4*4+4-4+4/4+4*4+4+4*4-4-4/4+4/4+4+4/4*4-4+4/4+4*4-4/4*4+4+4-4+4/4*4*4-4/4+44-4+4/4/4*4-4+4*4";
 		
 		Tokenizer tokenizer = new(input);
 		
