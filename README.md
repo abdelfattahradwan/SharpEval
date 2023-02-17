@@ -13,127 +13,70 @@ SharpEval is a library that allows you to parse & evaluate math expressions at r
 
 ## Usage
 
-### Parse & evaluate a simple expression:
+### Parse & evaluate an expression:
 
 ```cs
 using SharpEval;
 using SharpEval.Tokens;
+using SharpEval.Expressions;
 
 internal static class Program
 {
   internal static void Main()
   {
-    IToken[] tokens = Tokenizer.Tokenize(" 2 * ( 2 + 2 ) / 2 ");
+    Token[] tokens = new Tokenizer(" ( ( ( 2 + 2 ) ^ 2 + 16 ) - 2 ^ ( 4 + 4 ) ) / 2").ToArray();
   
-    Interpreter interpreter = new Interpreter();
+    Expression expression = new Parser(tokens).ParseExpression();
   
-    Console.WriteLine(interpreter.EvaluateExpression(tokens)); // 4
-  }
-}
-```
-
-### Parse & evaluate a more complex expression:
-
-```cs
-using SharpEval;
-using SharpEval.Tokens;
-
-internal static class Program
-{
-  internal static void Main()
-  {
-    IToken[] tokens = Tokenizer.Tokenize(" ( ( ( 2 + 2 ) ^ 2 + 16 ) - 2 ^ ( 4 + 4 ) ) / 2");
+    Ineterpreter.DictionaryContext context = new Ineterpreter.DictionaryContext();
   
-    Interpreter interpreter = new Interpreter();
-  
-    Console.WriteLine(interpreter.EvaluateExpression(tokens)); // -112
-  }
-}
-```
-
-### Define custom read-only variables:
-
-```cs
-using SharpEval;
-using SharpEval.Tokens;
-using SharpEval.Variables;
-
-internal static class Program
-{
-  internal static void Main()
-  {
-    IToken[] tokens = Tokenizer.Tokenize(" x + y ");
+    double result = Interpreter.Evaluate(expression);
     
-    Dictionary<string, IVariable> variables = new Dictionary<string, IVariable>()
+    Console.WriteLine(result); // -112
+  }
+}
+```
+
+### Define custom values and functions:
+
+```cs
+using SharpEval;
+using SharpEval.Tokens;
+using SharpEval.Expressions;
+
+internal static class Program
+{
+  internal static void Main()
+  {
+    Interpreter.DictionaryContext context = Ineterpreter.DictionaryContext
     {
-        ["x"] = new ReadOnlyVariable(10.0d),
-        ["y"] = new ReadOnlyVariable(20.0d),
-    };
-    
-    Interpreter interpreter = new Interpreter(variables: variables);
-    
-    Console.WriteLine(interpreter.EvaluateExpression(tokens)); // 25
-  }
-}
-```
-
-### Define custom computed variables:
-
-```cs
-using SharpEval;
-using SharpEval.Tokens;
-using SharpEval.Variables;
-using System;
-
-internal static class Program
-{
-  internal static void Main()
-  {
-    IToken[] tokens = Tokenizer.Tokenize(" randomNumber + 1 ");
-    
-    Random random = new Random();
-    
-    Dictionary<string, IVariable> variables = new Dictionary<string, IVariable>()
-    {
-        ["randomNumber"] = new ComputedVariable(() => random.NextDouble()),
+        Values =
+        {
+            ["x"] = 10.0d,
+            ["y"] = 20.0d,
+        },
+        
+        Functions =
+        {
+            ["sum"] = args => args.Sum(),
+        },
     };
   
-    Interpreter interpreter = new Interpreter(variables: variables);
+    Token[] tokens = new Tokenizer(" sum ( x , y ) ").ToArray();
     
-    Console.WriteLine(interpreter.EvaluateExpression(tokens));
-  }
-}
-```
-
-### Define custom functions:
-
-```cs
-using SharpEval;
-using SharpEval.Tokens;
-using System.Linq;
-
-internal static class Program
-{
-  internal static void Main()
-  {
-    IToken[] tokens = Tokenizer.Tokenize(" sum( 1, 2, 3 ) ");
+    Expression expression = new Parser(tokens).ParseExpression();
     
-    Dictionary<string, Func<double[], double>> functions = new Dictionary<string, Func<double[], double>>()
-    {
-        ["sum"] = args => args.Sum(),
-    };
+    double result = Interpreter.Evaluate(expression, context);
     
-    Interpreter interpreter = new Interpreter(functions: functions);
-    
-    Console.WriteLine(interpreter.EvaluateExpression(tokens)); // 6
+    Console.WriteLine(result); // 30
   }
 }
 ```
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome for the SharpEval project. If you would like to suggest a major change, please open an issue to discuss it before submitting the pull request.
 
 ## Donation
 
-If you like SharpEval consider [buying me a coffee](https://ko-fi.com/winterboltgames).
+If you like SharpEval, please consider supporting me by donating. Your generosity will be greatly appreciated. [Click here to donate](https://ko-fi.com/winterboltgames). Thank you for your support!
